@@ -416,3 +416,4 @@ Structure Theory](https://cmu.primo.exlibrisgroup.com/discovery/fulldisplay?doci
 1. [PySCF: the Python-based simulations of chemistry framework](https://wires.onlinelibrary.wiley.com/doi/10.1002/wcms.1340), Q. Sun, T. C. Berkelbach, N. S. Blunt, G. H. Booth, S. Guo, Z. Li, J. Liu, J. McClain, S. Sharma, S. Wouters, and G. K.-L. Chan, WIREs Comput. Mol. Sci. 8, e1340 (2018).
 
 1. [Libcint: An efficient general integral library for Gaussian basis functions](https://doi.org/10.1002/jcc.23981), Q. Sun, J. Comp. Chem. 36, 1664 (2015).
+
