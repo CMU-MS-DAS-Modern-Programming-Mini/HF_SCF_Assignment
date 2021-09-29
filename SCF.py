@@ -17,6 +17,7 @@ def calc_nuclear_repulsion_energy(mol_):
 
     Returns:
         Enuc: The n-e repulsion energy
+    Testing
     """
 
     charges = mol_.atom_charges()
@@ -29,7 +30,7 @@ def calc_nuclear_repulsion_energy(mol_):
             distance_matrix[a, b] = np.linalg.norm(coords[a] - coords[b])
 
     for a in range(0, 3):
-        for b in range(a, 3):
+        for b in range(a+1, 3):
             Enuc += (charges[a]*charges[b])/distance_matrix[a, b]
 
     return Enuc
