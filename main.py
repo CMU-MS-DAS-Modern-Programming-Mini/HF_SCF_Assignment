@@ -12,8 +12,51 @@ It is intended to give students a basic exposure to the following concepts
 The instructions for the assignement come in the Readme from the repository
 at:
 """
-from pyscf import gto  # PySCF is a quantum chemistry python module
 import SCF
+import numpy as np
+import pickle
+import sys
+
+
+class mol:
+    """
+    class mol
+
+    Contains the information about the molecule
+    """
+
+    def __init__(self, atom_string_, nao_, nelect_, nmo_):
+        """
+        mol Creator - creates an instance of the mol class
+
+        Arguments:
+          atoms_string_: A string for defining the atoms in the molecule
+          nao_: Number of atomic orbitals
+          nelec_: Number of electrons / 2
+          nmo_: Number of molecular orbitals
+
+        Returns:
+            instance of mol
+        """
+        self.nao = nao_
+        self.nelec = [nelect_, nelect_]
+        self.nmo = nmo_
+        self.charges = []
+        coords_list = []
+        atom_list = atom_string_.split(";")
+        for a in atom_list:
+            print(a.split()[2])
+            self.charges.append(int(a.split()[0]))
+            coords_list.append([float(a.split()[1]),
+                                float(a.split()[2]),
+                                float(a.split()[3])])
+        self.coords = np.array(coords_list)
+
+    def atom_charges(self):
+        return self.charges
+
+    def atom_coords(self):
+        return self.coords
 
 
 def main():
@@ -26,23 +69,25 @@ def main():
     """
 
     # Input Data
-    mol_h2o = gto.M(unit="Bohr",
-                    atom="O 0.000000000000  -0.143225816552   0.000000000000;"
-                    + "H 1.638036840407   1.136548822547  -0.000000000000;"
-                    + "H -1.638036840407   1.136548822547  -0.000000000000",
-                    basis='STO-3g')
-    mol_h2o.build()
+    atom = "8 0.000000000000  -0.143225816552   0.000000000000;" \
+        + "1 1.638036840407   1.136548822547  -0.000000000000;" \
+        + "1 -1.638036840407   1.136548822547  -0.000000000000"
 
+    mol_h2o = mol(atom, 7, 5, 7)
     # Convergence Criteria
     E_conv_threshold = 1.0E-10
     D_conv_threshold = 1.0E-8
     max_iterations = 1000
 
     # get the integrals
-    Suv = mol_h2o.intor('int1e_ovlp')  # Overlap Integrals
-    Tuv = mol_h2o.intor('int1e_kin')  # Kinetic Energy 1 electron integrals
-    Vuv = mol_h2o.intor('int1e_nuc')  # Nuclear Repulsion 1 electron integrals
-    eri = mol_h2o.intor("int2e")  # Electron Repulsion 2 electron integrals
+    # Overlap Integrals
+    Suv = pickle.load(open("suv.pkl", "rb"))
+    # Kinetic Energy 1 electron integrals
+    Tuv = pickle.load(open("tuv.pkl", "rb"))
+    # Nuclear Repulsion 1 electron integrals
+    Vuv = pickle.load(open("vuv.pkl", "rb"))
+    # Electron Repulsion 2 electron integrals
+    eri = pickle.load(open("eri.pkl", "rb"))
 
     """
     Main SCF Procedure
@@ -51,18 +96,19 @@ def main():
     Your job will be to fill in the stubbed functions in SCF.py
 
     Step 1. Calculate the Electron Nuclear Repulsion Energy
-    Step 2. Calculate the Initial Hcore Matrix
-    Step 3. Calculate the Inital Density Matrix
-    Step 4. Start the SCF Procedure
-        Step 4a. Calculate the Fock Matrix
-        Step 4b. Solve Eigenvalues and Eigenvectors of Roothan Equations
-        Step 4c. Calculate the Total Energy of the Current Iteration
-        Step 4d. Caluate the new Density Matrix
-        Step 4e. Calulate the Energy Difference and RMS Difference of Density
-        Step 4f. Check for Convergence, if Converged, Exit
-        Step 4g. If not Converged, update Density Matrix and Energy and do
+    Step 2. Calculate the Orthogonality Matrix(S ^ (-1/2))
+    Step 3. Calculate the Initial Hcore Matrix
+    Step 4. Calculate the Inital Density Matrix
+    Step 5. Start the SCF Procedure
+        Step 5a. Calculate the Fock Matrix
+        Step 5b. Solve Eigenvalues and Eigenvectors of Roothan Equations
+        Step 5c. Calculate the Total Energy of the Current Iteration
+        Step 5d. Caluate the new Density Matrix
+        Step 5e. Calulate the Energy Difference and RMS Difference of Density
+        Step 5f. Check for Convergence, if Converged, Exit
+        Step 5g. If not Converged, update Density Matrix and Energy and do
                  another iteration
-    Step 5. Print out Final Total Energy for User
+    Step 6. Print out Final Total Energy for User
     """
 
     Enuc = SCF.calc_nuclear_repulsion_energy(mol_h2o)
@@ -71,9 +117,10 @@ def main():
     Etot = 0.0
     for it in range(max_iterations):
         Fuv = SCF.calc_fock_matrix(mol_h2o, Huv, eri, Duv)
+
         mo_e, mo_c = SCF.solve_Roothan_equations(Fuv, Suv)
 
-        Etot_new = SCF.calc_tot_energy(Fuv, Huv, Duv, Enuc)
+        Etot_new = SCF.calc_total_energy(Fuv, Huv, Duv, Enuc)
 
         Duv_new = SCF.form_density_matrix(mol_h2o, mo_c)
 
