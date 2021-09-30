@@ -140,7 +140,7 @@ def calc_fock_matrix(mol_, h_core_, er_ints_, Duv_):
     # exchange term
     for u in range(num_aos):
         for v in range(num_aos):
-            Fuv[u, v] -= (Duv_ * er_ints_[u, : , v]).sum() # !
+            Fuv[u, v] -= (0.5 * (Duv_ * er_ints_[u, :, v]).sum()) # !
 
     return Fuv
 
