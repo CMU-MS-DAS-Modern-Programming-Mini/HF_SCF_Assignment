@@ -73,7 +73,7 @@ def main():
         Fuv = SCF.calc_fock_matrix(mol_h2o, Huv, eri, Duv)
         mo_e, mo_c = SCF.solve_Roothan_equations(Fuv, Suv)
 
-        Etot_new = SCF.calc_tot_energy(Fuv, Huv, Duv, Enuc)
+        Etot_new = SCF.calc_total_energy(Fuv, Huv, Duv, Enuc)
 
         Duv_new = SCF.form_density_matrix(mol_h2o, mo_c)
 
@@ -93,3 +93,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+main()
