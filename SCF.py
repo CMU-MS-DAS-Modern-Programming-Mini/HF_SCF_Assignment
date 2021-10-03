@@ -211,5 +211,6 @@ def calc_tot_energy(Fuv_, Huv_, Duv_, Enuc_):
     Should be able to implement this in one line with matrix arithmatic
 
     """
-    E_tot = ((Duv_ @ (Huv_+Fuv_) + Enuc_)[0,0])
-    return E_tot/2
+    E_tot = .5*(Duv_ * (Huv_+Fuv_)).sum() + Enuc_
+    
+    return E_tot
