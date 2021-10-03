@@ -36,7 +36,7 @@ def main():
     # Convergence Criteria
     E_conv_threshold = 1.0E-10
     D_conv_threshold = 1.0E-8
-    max_iterations = 1000
+    max_iterations = 2#1000
 
     # get the integrals
     Suv = mol_h2o.intor('int1e_ovlp')  # Overlap Integrals
