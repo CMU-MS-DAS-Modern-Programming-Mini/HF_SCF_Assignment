@@ -122,7 +122,6 @@ def calc_fock_matrix(mol_, h_core_, er_ints_, Duv_):
         for j in range(num_aos):
             Fuv[i,j] -= .5*(Duv_ * er_ints_[i, : , j]).sum()
 
-    print("Fuv", Fuv[0,0],  Fuv[2,5])
 
     return Fuv
 
@@ -184,8 +183,6 @@ def form_density_matrix(mol_, mo_coeffs_):
          for v in range(num_aos):
              for i in range(nelec):
                  Duv[u][v] = Duv[u][v] + (2 * (mo_coeffs_[u][i] * mo_coeffs_[v][i])) 
-
-    print("Duv", Duv[0,0], Duv[2,5])
 
     return Duv
 
