@@ -239,7 +239,7 @@ which would be equivalent to:
 ```python
 for k in range(nao):
   for l in range(nao):
-    Fuv[0,0] += Duv[k,l]*eri[0,0,k,l]}
+    Fuv[0,0] += Duv[k,l]*eri[0,0,k,l]
 ```
 
 The second term: <img src="https://latex.codecogs.com/gif.latex?%5Csum_%7B%5Ckappa%20%5Clambda%7D%20D_%7B%5Ckappa%20%5Clambda%7D%20%28%5Cmu%20%5Ckappa%20%7C%20%5Cnu%20%5Clambda%29">, is the Exchange Term and has no classical analogue. It is a result of the Pauli principle in electrons of the same spin avoid each other.
@@ -257,7 +257,7 @@ would be equivalent to:
 ```python
 for k in range(nao):
   for l in range(nao):
-    Fuv[0,0] -= Duv[k,l]*eri(0,k,0,l)
+    Fuv[0,0] -= Duv[k,l]*eri[0,k,0,l]
 ```
 
 *Hint:*
