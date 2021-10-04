@@ -21,41 +21,26 @@ def calc_nuclear_repulsion_energy(mol_):
 
     charges = mol_.atom_charges()
     coords = mol_.atom_coords()
+    # print(coords, charges)
     Enuc = 0
     distance_matrix = np.zeros((3, 3), dtype=np.double)
+
+    for i in range(len(coords)):
+        for j in range(len(coords[i])):
+            distance_matrix[i][j] = np.linalg.norm(coords[i] - coords[j])
+    
+    for i in range(len(coords)):
+        for j in range(len(coords[i])):
+            if j > i:
+                Enuc += ((charges[i] * charges[j]) / distance_matrix[i][j])
 
     """
     Replace with your implementation
 
     Step 1. calcuate (3x3) distance matrix between all atoms
-    Step 2. Loop over atoms and calculate Enuc from formulat in Readme
+    Step 2. Loop over atoms and calculate Enuc from formula in Readme
     """
-
     return Enuc
-
-
-def calc_shalf(Suv_):
-    """
-    calc_shalf - Calculates the Orthogonality Matrix from the Overlap
-
-    Arguents:
-        Suv_ : The (mol.nao x mol.nao) overlap Matrix
-
-    Returns:
-        s_half: The (mol.nao x mol.nao) Orthogonality Matrix
-    """
-
-    """
-    Replace with your implementation
-
-    Step 1. Take the factional matrix power of Suv to -(1.0/2.0)
-
-    Hint: There is a SciPy function in the scipy.linalg library that does this.
-          Do not just take the matrix to the power of -1/2, that is not correct.
-    """
-
-    return s_half
-
 
 def calc_initial_density(mol_):
     """
@@ -75,7 +60,8 @@ def calc_initial_density(mol_):
     as the guess. This is equivalent to returning an (mol.nao x mol.nao) double
     matrix of zeros.
     """
-
+    num_aos = mol_.nao 
+    Duv = np.zeros((num_aos, num_aos), dtype = np.double)
     return Duv
 
 
@@ -96,7 +82,7 @@ def calc_hcore_matrix(Tuv_, Vuv_):
 
     Per the readme, this is a simple addition of the two matrices
     """
-
+    h_core = Tuv_ + Vuv_
     return h_core
 
 
@@ -124,7 +110,7 @@ def calc_fock_matrix(mol_, h_core_, er_ints_, Duv_):
     Here you will do the summation of the last two terms in the Fock matrix
     equation involving the two electron Integrals
 
-    Hint: You can do this with explicit loops over matrix indices, whichwill
+    Hint: You can do this with explicit loops over matrix indices, which will
           have many for loops.
 
     This can also be done with numpy aggregations, bonus points if you
@@ -133,6 +119,14 @@ def calc_fock_matrix(mol_, h_core_, er_ints_, Duv_):
     For example, the first term can be implemented like the following:
     (er_ints[mu,nu]*Duv).sum()
     """
+    
+    for u in range(num_aos):
+        for v in range(num_aos):
+            Fuv[u, v] += (Duv_ * er_ints_[u,v]).sum()
+    
+    for u in range(num_aos):
+        for v in range(num_aos):
+            Fuv[u, v] -= (0.5 * Duv_ * er_ints_[u, : ,v]).sum()
 
     return Fuv
 
@@ -161,19 +155,21 @@ def solve_Roothan_equations(Fuv_, Suv_):
     function and you can implement this in one line.
     """
 
+    mo_energies, mo_coeffs = sp.linalg.eigh(Fuv_, Suv_)
+    
     return mo_energies, mo_coeffs
 
 
 def form_density_matrix(mol_, mo_coeffs_):
     """
-    form_dentsity_matrix - forms the density matrix from the eigenvectors
+    form_density_matrix - forms the density matrix from the eigenvectors
 
     Note: the loops are over the number of electrons / 2, not all of the
     atomic orbitals
 
     Arguments:
         mol_: the PySCF molecule data structure created from Input
-        mo_coefficients: a matrix of the eigenvectors of the solution
+        mo_coeffs_: a matrix of the eigenvectors of the solution
 
     Returns:
         Duv: the density matrix
@@ -189,6 +185,11 @@ def form_density_matrix(mol_, mo_coeffs_):
     that is a sum over the produces of the mo_coeffs.
 
     """
+
+    for u in range(num_aos):
+        for v in range(num_aos):
+            for k in range(nelec):
+                Duv[u][v] += 2 * mo_coeffs_[u][k] * mo_coeffs_[v][k]
 
     return Duv
 
@@ -214,5 +215,7 @@ def calc_total_energy(Fuv_, Huv_, Duv_, Enuc):
     Should be able to implement this in one line with matrix arithmatic
 
     """
+
+    Etot = (1/2 * (Duv_ * (Huv_ + Fuv_)).sum()) + Enuc_
 
     return Etot
