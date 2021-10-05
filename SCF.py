@@ -19,30 +19,16 @@ def calc_nuclear_repulsion_energy(mol_):
         Enuc: The n-e repulsion energy
     """
 
-    charges = mol_.atom_charges()  # Z stands for charge
-    coords = mol_.atom_coords()  # xyz coordinates for each atom
+    charges = mol_.atom_charges()
+    coords = mol_.atom_coords()
     Enuc = 0
     distance_matrix = np.zeros((3, 3), dtype=np.double)
-
-    # make a distance matrix using XYZ coordinates of the molecule
-    for x in range(len(coords)):
-        for y in range(len(coords[x])):
-            distance_matrix[x][y] = np.linalg.norm(coords[x] - coords[y])
-
-    # print(distance_matrix)
-
-    # loop over distance matrix to calculate Enuc
-    for x in range(len(distance_matrix)):
-        for y in range(len(distance_matrix[x])):
-            if y > x:  # only gets half of the values
-                Enuc += ((charges[x] * charges[y]) / distance_matrix[x][y])
-    # print(Enuc)
 
     """
     Replace with your implementation
 
     Step 1. calcuate (3x3) distance matrix between all atoms
-    Step 2. Loop over atoms and calculate Enuc from formula in Readme
+    Step 2. Loop over atoms and calculate Enuc from formulat in Readme
     """
 
     return Enuc
@@ -60,17 +46,7 @@ def calc_initial_density(mol_):
     """
 
     num_aos = mol_.nao  # Number of atomic orbitals, dimensions of the mats
-
-    # make matrix of (mol.nao X mol.nao) filled with zeroes called Duv
     Duv = np.zeros((num_aos, num_aos), dtype=np.double)
-
-    """
-    Replace with your implementation
-
-    While we could do many things here, lets start with using the 1e Integrals
-    as the guess. This is equivalent to returning an (mol.nao x mol.nao) double
-    matrix of zeros.
-    """
 
     return Duv
 
@@ -86,12 +62,6 @@ def calc_hcore_matrix(Tuv_, Vuv_):
     Returns:
         h_core: The one electron hamiltonian matrix
     """
-
-    h_core = Tuv_ + Vuv_
-
-    # print(h_core[0][0])
-    # print(h_core[3][4])
-    # print(h_core[4][3])
 
     """
     Replace with your implementation
@@ -119,20 +89,6 @@ def calc_fock_matrix(mol_, h_core_, er_ints_, Duv_):
 
     Fuv = h_core_.copy()  # Takes care of the Huv part of the fock matrix
     num_aos = mol_.nao    # Number of atomic orbitals, dimension of the mats
-
-    # solving coulomb term and add to fock matrix
-    for u in range(num_aos):
-        for v in range(num_aos):
-            Fuv[u, v] += (Duv_ * er_ints_[u, v]).sum()
-
-    # solving exchange term and subtract from value stored in fock matrix
-    for u in range(num_aos):
-        for v in range(num_aos):
-            Fuv[u, v] -= (0.5 * Duv_ * er_ints_[u, :, v]).sum()
-
-    # print(Fuv[0][0])
-    # print(Fuv[2][5])
-    # print(Fuv[5][2])
 
     """
     Replace with your implementation
@@ -167,10 +123,7 @@ def solve_Roothan_equations(Fuv_, Suv_):
         mo_coefficients: a matrix of the eigenvectors of the solution
 
     """
-    mo_energies, mo_coeffs = sp.linalg.eigh(Fuv_, Suv_)
 
-    # print(mo_energies.real)
-    # print(mo_coeffs.real[0,:])
     """
     Replace with your implementation
 
@@ -200,19 +153,8 @@ def form_density_matrix(mol_, mo_coeffs_):
 
     nelec = mol_.nelec[0]  # Number of occupied orbitals
     num_aos = mol_.nao  # Number of atomic orbitals, dimensions of the mats
-    Duv = np.zeros((mol_.nao, mol_.nao), dtype=np.double)
+    Duv = np.zeros(mol_.nao, mol_.nao, dtype=np.double)
 
-    # loop over u and v for the density matrix
-    # loop over i for the specific indices in coefficient matrix
-    for u in range(num_aos):
-        for v in range(num_aos):
-            for i in range(nelec):
-                Duv[u][v] = Duv[u][v] + \
-                            (2 * (mo_coeffs_[u][i] * mo_coeffs_[v][i]))
-
-    # print(Duv[0][0])
-    # print(Duv[2][5])
-    # print(Duv[5][2])
     """
     Replace with your implementation
 
@@ -224,7 +166,7 @@ def form_density_matrix(mol_, mo_coeffs_):
     return Duv
 
 
-def calc_tot_energy(Fuv_, Huv_, Duv_, Enuc_):
+def calc_total_energy(Fuv_, Huv_, Duv_, Enuc_):
     """
     calc_total_energy - This function calculates the total energy of the
     molecular system
@@ -238,7 +180,6 @@ def calc_tot_energy(Fuv_, Huv_, Duv_, Enuc_):
     Returns:
         Etot: the total energy of the molecule
     """
-    Etot = (0.5 * (Duv_ * (Huv_ + Fuv_)).sum()) + Enuc_
 
     """
     Replace with your implementation
