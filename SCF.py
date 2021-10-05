@@ -123,10 +123,10 @@ def calc_fock_matrix(mol_, h_core_, er_ints_, Duv_):
     (er_ints[mu,nu]*Duv).sum()
     """
 
-    for k in range(num_aos):
-        for l in range(num_aos):
-            Fuv[k, l] += (Duv_*er_ints_[k, l]).sum() - \
-                (Duv_*er_ints_[k, :, l]).sum()/2
+    for i in range(num_aos):
+        for j in range(num_aos):
+            Fuv[i, j] += (Duv_*er_ints_[i, j]).sum() - \
+                (Duv_*er_ints_[i, :, j]).sum()/2
     return Fuv
 
 
