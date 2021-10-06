@@ -60,6 +60,7 @@ def calc_initial_density(mol_):
     """
 
     num_aos = mol_.nao  # Number of atomic orbitals, dimensions of the mats
+=======
     Duv=np.zeros((num_aos, num_aos), dtype=np.double) #using a matrix of zeros as initial guess
 
     return Duv
