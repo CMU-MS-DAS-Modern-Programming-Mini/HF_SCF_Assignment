@@ -48,7 +48,7 @@ def test_solve_Roothan_equation(mol_h2o):
     assert mo_coeffs[0, 2] == pytest.approx(-4.97111543e-16)
     assert mo_coeffs[0, 3] == pytest.approx(-8.56842145e-02)
     assert mo_coeffs[0, 4] == pytest.approx(-2.02299681e-29)
-    assert mo_coeffs[0, 5] == pytest.approx(abs(4.82226067e-02))
+    assert abs(mo_coeffs[0, 5]) == pytest.approx(abs(4.82226067e-02))
     assert mo_coeffs[0, 6] == pytest.approx(-4.99600361e-16)
 
 
