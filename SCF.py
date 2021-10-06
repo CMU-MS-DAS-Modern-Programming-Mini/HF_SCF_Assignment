@@ -4,7 +4,7 @@ for the HF SCF Procedure
 """
 
 import numpy as np
-import scipy as sp
+import scipy.linalg as sp_la
 
 
 def calc_nuclear_repulsion_energy(mol_):
@@ -144,7 +144,7 @@ def solve_Roothan_equations(Fuv_, Suv_):
 
     """
 
-    mo_energies, mo_coeffs = sp.linalg.eigh(Fuv_, Suv_)
+    mo_energies, mo_coeffs = sp_la.eigh(Fuv_, Suv_)
 
     """
     Replace with your implementation

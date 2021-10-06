@@ -51,11 +51,6 @@ def test_calc_fock_matrix(mol_h2o):
     assert Fuv[2][5] == pytest.approx(-1.6751501447185015),\
         "Fock Matrix Test Failed"
 
-# I get an AttributeError: module 'scipy' has no attribute 'linalg'
-# when I run test_solve_roothan_equations and test_form_density_matrix
-# I don't know why, because my SCF.py code works in main.py.
-# I believe I am writing the tests correctly.
-
 
 def test_solve_Roothan_equations(mol_h2o):
     # inputs: Fuv and Suv
@@ -71,15 +66,15 @@ def test_solve_Roothan_equations(mol_h2o):
     mo_e, mo_c = SCF.solve_Roothan_equations(Fuv, Suv)
 
     # assert statements
-    assert mo_e[0] == pytest.approx([-32.5783029, -8.08153571, -7.55008599,
-                                     -7.36396923,  -7.34714487, -4.00229867,
-                                     -3.98111115]),\
+    assert mo_e == pytest.approx([-32.5783029, -8.08153571, -7.55008599,
+                                  -7.36396923,  -7.34714487, -4.00229867,
+                                  -3.98111115]),\
         "Roothan Equation Test Failed"
 
-    assert mo_c[0, :] == pytest.approx([-1.00154358e+00, 2.33624458e-01,
-                                        1.31048670e-17, -8.56842145e-02,
-                                        -1.26828709e-31, -4.82226067e-02,
-                                        1.47103574e-17]),\
+    assert mo_c[0, :] == pytest.approx([-1.00154358e+00,  -2.33624458e-01,
+                                        4.97111543e-16, -8.56842145e-02,
+                                        2.02299681e-29,  4.82226067e-02,
+                                        -4.99600361e-16]),\
         "Roothan Equation Test Failed"
 
 
@@ -97,7 +92,7 @@ def test_form_density_matrix(mol_h2o):
     Duv_new = SCF.form_density_matrix(mol_h2o, mol_c)
 
     # assert statements
-    assert Duv_new[0][0] == 2.130023428655504,\
+    assert Duv_new[0][0] == pytest.approx(2.130023428655504),\
         "Density Matrix Test Failed"
 
     assert Duv_new[2][5] == pytest.approx(-0.29226330209653156),\
