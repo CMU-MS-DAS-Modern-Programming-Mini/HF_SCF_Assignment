@@ -24,7 +24,6 @@ def calc_nuclear_repulsion_energy(mol_):
     coords = mol_.atom_coords()
     Enuc = 0
     distance_matrix = np.zeros((3, 3), dtype=np.double)
-<<<<<<< HEAD
     # this is calculating distance
     for i in range(3):
         for j in range(3):
@@ -33,20 +32,6 @@ def calc_nuclear_repulsion_energy(mol_):
     for i in range(2):
         for j in range(i+1, 3):
             Enuc += charges[i] * charges[j] / distance_matrix[i, j]
-=======
-    #this is calculating distance
-    for i in range(3):
-        for j in range(3):
-            distance_matrix[i,j] = np.linalg.norm(coords[i]- coords[j])
-            
-    #now summation loop with charges is needed to calculate repulsion energy
-    for i in range(2):
-        for j in range(i+1,3):
-            Enuc += charges[i] * charges[j] / distance_matrix[i,j]
-    
-            
-
->>>>>>> 8b1e01941f258b3644e211f6c1188c3a6cc7257f
     return Enuc
 
 
@@ -69,13 +54,8 @@ def calc_initial_density(mol_):
     as the guess. This is equivalent to returning an (mol.nao x mol.nao) double
     matrix of zeros. 
     """
-<<<<<<< HEAD
     # All is needed is an empty matrix with the dimensions of num_aos
     Duv = np.zeros((num_aos, num_aos), dtype=np.double)
-=======
-    #All is needed is an empty matrix with the dimensions of num_aos
-    Duv = np.zeros((num_aos,num_aos), dtype=np.double)
->>>>>>> 8b1e01941f258b3644e211f6c1188c3a6cc7257f
     return Duv
 
 
@@ -96,14 +76,8 @@ def calc_hcore_matrix(Tuv_, Vuv_):
 
     Per the readme, this is a simple addition of the two matrices
     """
-<<<<<<< HEAD
+
     h_core = Tuv_ + Vuv_
-    # h_core is correct
-=======
-    
-    h_core = Tuv_ + Vuv_
-    #h_core is correct
->>>>>>> 8b1e01941f258b3644e211f6c1188c3a6cc7257f
     return h_core
 
 
@@ -140,27 +114,12 @@ def calc_fock_matrix(mol_, h_core_, er_ints_, Duv_):
     For example, the first term can be implemented like the following:
     (er_ints[mu,nu]*Duv).sum()
     """
-<<<<<<< HEAD
     # double loop is needed here, both with range num_aos
     # need to sum first value and second value
     for i in range(num_aos):
         for j in range(num_aos):
             Fuv[i, j] = Fuv[i, j] + (Duv_ * er_ints_[i, j]).sum() - \
                 0.5 * (Duv_ * er_ints_[i, :, j]).sum()
-=======
-    #double loop is needed here, both with range num_aos
-    #need to sum first value and second value
-    
-            
-    for i in range(num_aos):
-        for j in range(num_aos):
-            Fuv[i,j] = Fuv[i,j] + (Duv_*er_ints_[i,j]).sum() - \
-                0.5 * (Duv_*er_ints_[i,:,j]).sum()
-                
-    print(Fuv[0,0])
-    print(Fuv[2,5])
-    
->>>>>>> 8b1e01941f258b3644e211f6c1188c3a6cc7257f
     return Fuv
 
 
@@ -187,14 +146,7 @@ def solve_Roothan_equations(Fuv_, Suv_):
     symmetric hermitian matrix. Take a look at the documentation for that
     function and you can implement this in one line.
     """
-<<<<<<< HEAD
     mo_energies, mo_coeffs = sp.linalg.eigh(Fuv_, Suv_)
-=======
-    mo_energies, mo_coeffs = sp.linalg.eigh(Fuv_,Suv_)
-    
-    
-
->>>>>>> 8b1e01941f258b3644e211f6c1188c3a6cc7257f
     return mo_energies.real, mo_coeffs.real
 
 
@@ -224,18 +176,10 @@ def form_density_matrix(mol_, mo_coeffs_):
     that is a sum over the produces of the mo_coeffs.
 
     """
-<<<<<<< HEAD
     for i in range(num_aos):
         for j in range(num_aos):
             Duv[i, j] = 2 * np.multiply(mo_coeffs_[i, 0:nelec],
                                         mo_coeffs_[j, 0:nelec]).sum()
-=======
-   #double for loop here used to multiply matrix elements and then summing them
-    for i in range(num_aos):
-        for j in range(num_aos):
-            Duv[i,j] = 2 * np.multiply(mo_coeffs_[i,0:nelec], mo_coeffs_[j,0:nelec]).sum()
-
->>>>>>> 8b1e01941f258b3644e211f6c1188c3a6cc7257f
     return Duv
 
 
@@ -261,9 +205,4 @@ def calc_total_energy(Fuv_, Huv_, Duv_, Enuc_):
 
     """
     Etot = 0.5 * (Duv_ * (Huv_ + Fuv_)).sum() + Enuc_
-<<<<<<< HEAD
-=======
-    
-    
->>>>>>> 8b1e01941f258b3644e211f6c1188c3a6cc7257f
     return Etot
