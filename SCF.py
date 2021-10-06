@@ -5,7 +5,7 @@ for the HF SCF Procedure
 
 import numpy as np
 import scipy as sp
-
+import scipy.linalg as linalg
 
 def calc_nuclear_repulsion_energy(mol_):
     """
@@ -39,7 +39,7 @@ def calc_nuclear_repulsion_energy(mol_):
         distance_row = []
         for j in range(rows):
             atom_j = coords[j, :]
-            distance_ij = np.linalg.norm(atom_i - atom_j)
+            distance_ij = linalg.norm(atom_i - atom_j)
             distance_row.append(distance_ij)
         distance.append(distance_row)
     distance = np.asarray(distance).reshape(3, 3)
@@ -162,7 +162,7 @@ def solve_Roothan_equations(Fuv_, Suv_):
     symmetric hermitian matrix. Take a look at the documentation for that
     function and you can implement this in one line.
     """
-    mo_energies, mo_coeffs = sp.linalg.eigh(Fuv_, Suv_, eigvals_only=False)
+    mo_energies, mo_coeffs = linalg.eigh(Fuv_, Suv_, eigvals_only=False)
     return mo_energies.real, mo_coeffs.real
 
 
