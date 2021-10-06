@@ -6,6 +6,7 @@ for the HF SCF Procedure
 import numpy as np
 import scipy.linalg
 
+
 def calc_nuclear_repulsion_energy(mol_):
     """
     calc_nuclear_repulsion_energy - calculates the n-e repulsion energy of a
