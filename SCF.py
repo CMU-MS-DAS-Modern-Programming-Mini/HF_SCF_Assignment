@@ -4,8 +4,7 @@ for the HF SCF Procedure
 """
 
 import numpy as np
-import scipy as sp
-
+import scipy.linalg
 
 def calc_nuclear_repulsion_energy(mol_):
     """
@@ -26,13 +25,13 @@ def calc_nuclear_repulsion_energy(mol_):
 
     for i in range(3):
         for j in range(3):
-            distance_matrix[i,j] = np.linalg.norm(coords[i] - coords[j])
-            
-    for i in range(2):
-        for j in range(i+1,3):
-            Enuc += (charges[i] * charges[j] / distance_matrix[i,j])
+            distance_matrix[i, j] = np.linalg.norm(coords[i] - coords[j])
 
-    #print(Enuc) #correct
+    for i in range(2):
+        for j in range(i+1, 3):
+            Enuc += (charges[i] * charges[j] / distance_matrix[i, j])
+
+    # print(Enuc) #correct
     return Enuc
 
 
@@ -66,9 +65,9 @@ def calc_hcore_matrix(Tuv_, Vuv_):
     """
 
     h_core = Tuv_ + Vuv_
-    #print(h_core[0,0]) #all correct
-    #print(h_core[3,4])
-    #print(h_core[4,3])
+    # print(h_core[0,0]) #all correct
+    # print(h_core[3,4])
+    # print(h_core[4,3])
 
     return h_core
 
@@ -93,11 +92,11 @@ def calc_fock_matrix(mol_, h_core_, er_ints_, Duv_):
 
     for i in range(num_aos):
         for j in range(num_aos):
-            Fuv[i,j] = Fuv[i,j] + (Duv_*er_ints_[i,j]).sum() - \
-                .5 * (Duv_*er_ints_[i,:,j]).sum()
-    #print(Fuv[0,0]) #all correct
-    #print(Fuv[2,5]) #not exactly equal to below
-    #print(Fuv[5,2])
+            Fuv[i, j] = Fuv[i, j] + (Duv_*er_ints_[i, j]).sum() - \
+                .5 * (Duv_*er_ints_[i, :, j]).sum()
+    # print(Fuv[0,0]) #all correct
+    # print(Fuv[2,5]) #not exactly equal to below
+    # print(Fuv[5,2])
     return Fuv
 
 
@@ -116,9 +115,9 @@ def solve_Roothan_equations(Fuv_, Suv_):
 
     """
 
-    mo_energies, mo_coeffs = sp.linalg.eigh(Fuv_, Suv_)
-    #print(mo_energies.real)
-    #print(mo_coeffs.real[0,:]) #some values incorrect, but it's fine?
+    mo_energies, mo_coeffs = scipy.linalg.eigh(Fuv_, Suv_)
+    # print(mo_energies.real)
+    # print(mo_coeffs.real[0,:]) #some values incorrect, but it's fine?
 
     return mo_energies.real, mo_coeffs.real
 
@@ -142,11 +141,11 @@ def form_density_matrix(mol_, mo_coeffs_):
     num_aos = mol_.nao  # Number of atomic orbitals, dimensions of the mats
     Duv = np.zeros((mol_.nao, mol_.nao), dtype=np.double)
 
-    c = mo_coeffs_[:,0:nelec]
+    c = mo_coeffs_[:, 0:nelec]
     Duv = 2 * np.matmul(c, np.transpose(c))
-    #print(Duv[0,0]) #correct
-    #print(Duv[2,5])
-    #print(Duv[5,2])
+    # print(Duv[0,0]) #correct
+    # print(Duv[2,5])
+    # print(Duv[5,2])
 
     return Duv
 
@@ -166,6 +165,6 @@ def calc_tot_energy(Fuv_, Huv_, Duv_, Enuc_):
         Etot: the total energy of the molecule
     """
 
-    Etot = .5 * (np.multiply(Duv_,(Huv_ + Fuv_))).sum() + Enuc_
+    Etot = .5 * (np.multiply(Duv_, (Huv_ + Fuv_))).sum() + Enuc_
 
     return Etot
