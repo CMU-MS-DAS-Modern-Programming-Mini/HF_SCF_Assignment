@@ -147,7 +147,6 @@ def solve_Roothan_equations(Fuv_, Suv_):
     function and you can implement this in one line.
     """
     mo_energies, mo_coeffs = sp.linalg.eigh(Fuv_, Suv_)
-
     return mo_energies.real, mo_coeffs.real
 
 
