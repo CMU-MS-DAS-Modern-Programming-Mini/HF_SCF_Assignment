@@ -154,7 +154,7 @@ def solve_Roothan_equations(Fuv_, Suv_):
     symmetric hermitian matrix. Take a look at the documentation for that
     function and you can implement this in one line.
     """
-
+    print(mo_coeffs.real)
     return mo_energies.real, mo_coeffs.real
 
 
