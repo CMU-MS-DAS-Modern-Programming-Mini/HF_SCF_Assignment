@@ -129,12 +129,12 @@ def calc_fock_matrix(mol_, h_core_, er_ints_, Duv_):
     # repulsion term
     for u in range(num_aos):
         for v in range(num_aos):
-            Fuv[u, v] += (Duv_ * er_ints_[u, v]).sum()  # (7x7) * (7x7) ==> (7x7) ==> 1
+            Fuv[u, v] += (Duv_ * er_ints_[u, v]).sum()
 
     # exchange term
     for u in range(num_aos):
         for v in range(num_aos):
-            Fuv[u, v] -= (0.5 * (Duv_ * er_ints_[u, :, v]).sum()) # !
+            Fuv[u, v] -= (0.5 * (Duv_ * er_ints_[u, :, v]).sum())
 
     return Fuv
 
@@ -162,7 +162,7 @@ def solve_Roothan_equations(Fuv_, Suv_):
     symmetric hermitian matrix. Take a look at the documentation for that
     function and you can implement this in one line.
     """
-    mo_energies, mo_coeffs = sp.linalg.eigh(Fuv_, Suv_, eigvals_only=False) #!
+    mo_energies, mo_coeffs = sp.linalg.eigh(Fuv_, Suv_, eigvals_only=False)
     return mo_energies.real, mo_coeffs.real
 
 
