@@ -4,7 +4,7 @@ for the HF SCF Procedure
 """
 
 import numpy as np
-import scipy as sp
+import scipy.linalg
 
 
 def calc_nuclear_repulsion_energy(mol_):
@@ -60,7 +60,6 @@ def calc_initial_density(mol_):
     """
 
     num_aos = mol_.nao  # Number of atomic orbitals, dimensions of the mats
-=======
     Duv=np.zeros((num_aos, num_aos), dtype=np.double) #using a matrix of zeros as initial guess
 
     return Duv
@@ -125,7 +124,7 @@ def calc_fock_matrix(mol_, h_core_, er_ints_, Duv_):
 
 def solve_Roothan_equations(Fuv_, Suv_):
 
-    mo_energies, mo_coeffs=sp.linalg.eigh(Fuv_, Suv_) #mo_energies is eigenvector & mo_coeffs is eigenvalues
+    mo_energies, mo_coeffs= scipy.linalg.eigh(Fuv_, Suv_) #mo_energies is eigenvector & mo_coeffs is eigenvalues
 
     """
     solve_Roothan_equations - Solves the matrix equations to determine
@@ -170,8 +169,7 @@ def form_density_matrix(mol_, mo_coeffs_):
 
     nelec = mol_.nelec[0]  # Number of occupied orbitals
     num_aos = mol_.nao  # Number of atomic orbitals, dimensions of the mats
-    Duv = np.zeros(mol_.nao, mol_.nao, dtype=np.double)
-
+    Duv=np.zeros((num_aos, num_aos), dtype=np.double)
     for u in range(num_aos):
         for v in range(num_aos):
             for i in range(nelec):
@@ -202,8 +200,6 @@ def calc_total_energy(Fuv_, Huv_, Duv_, Enuc_):
         Etot: the total energy of the molecule
     """
     Etot= 0.5*(Duv_ * (Huv_+Fuv_)).sum()+ Enuc_
-    print (Etot)
-   
     """
     Replace with your implementation
 
