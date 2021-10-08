@@ -27,7 +27,7 @@ def calc_nuclear_repulsion_energy(mol_):
     #calculate distance matrix between all atoms
     for x in range (len(coords)):
         for y in range (len(coords[x])):
-            distance_matrix[x][y]=np.linalg.norm(coords[x]-coords[y])
+            distance_matrix[x][y]= np.linalg.norm(coords[x]-coords[y])
 
     #print(distance_matrix.shape)
     #0print(distance_matrix)
