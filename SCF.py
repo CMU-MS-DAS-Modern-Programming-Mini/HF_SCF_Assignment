@@ -26,23 +26,24 @@ def calc_nuclear_repulsion_energy(mol_):
     # calculates distance matrix between all atoms
 
     # calculate distance matrix between all atoms
-    for x in range (len (coords)):
-        for y in range (len (coords[x])):
-            distance_matrix[x][y] = np.linalg.norm (coords[x] - coords[y])
+    for x in range(len(coords)):
+        for y in range(len(coords[x])):
+            distance_matrix[x][y] = np.linalg.norm(coords[x] - coords[y])
 
     # loop over atoms and calculate Enuc
-    for x in range(len (coords)):
-        for y in range(len (coords[x])):
+    for x in range(len(coords)):
+        for y in range(len(coords[x])):
             if y > x:
                 Enuc += ((charges[x] * charges[y]) / distance_matrix[x][y])
     return Enuc
-    
+
     """
     Replace with your implementation
 
     Step 1. calcuate (3x3) distance matrix between all atoms
     Step 2. Loop over atoms and calculate Enuc from formulat in Readme
     """
+
 
 def calc_initial_density(mol_):
     """
@@ -56,7 +57,7 @@ def calc_initial_density(mol_):
     """
 
     num_aos = mol_.nao  # Number of atomic orbitals, dimensions of the mats
-    Duv =np.zeros((num_aos, num_aos), dtype=np.double)  
+    Duv = np.zeros((num_aos, num_aos), dtype=np.double)
     # using a matrix of zeros as initial guess
 
     return Duv
@@ -74,8 +75,7 @@ def calc_hcore_matrix(Tuv_, Vuv_):
         h_core: The one electron hamiltonian matrix
     """
 
-    h_core = Tuv_ + Vuv_ 
-
+    h_core = Tuv_ + Vuv_
     return h_core
 
 
@@ -184,7 +184,7 @@ def form_density_matrix(mol_, mo_coeffs_):
     return Duv
 
 
-def calc_total_energy (Fuv_, Huv_, Duv_, Enuc_):
+def calc_total_energy(Fuv_, Huv_, Duv_, Enuc_):
     """
     calc_total_energy - This function calculates the total energy of the
     molecular system
@@ -198,7 +198,7 @@ def calc_total_energy (Fuv_, Huv_, Duv_, Enuc_):
     Returns:
         Etot: the total energy of the molecule
     """
-    Etot = 0.5 *(Duv_ * (Huv_+Fuv_)).sum() + Enuc_
+    Etot = 0.5 * (Duv_ * (Huv_+Fuv_)).sum() + Enuc_
     """
     Replace with your implementation
 
