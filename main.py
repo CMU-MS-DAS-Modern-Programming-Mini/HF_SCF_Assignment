@@ -80,7 +80,6 @@ def main():
     max_iterations = 1000
 
     # get the integrals
-    
     Suv = pickle.load(open("suv.pkl", "rb"))
     # Kinetic Energy 1 electron integrals
     Tuv = pickle.load(open("tuv.pkl", "rb"))
@@ -138,5 +137,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main() 
-    
+    main()
