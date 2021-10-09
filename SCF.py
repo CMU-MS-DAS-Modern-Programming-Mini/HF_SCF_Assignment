@@ -42,6 +42,10 @@ def calc_nuclear_repulsion_energy(mol_):
     """
     return Enuc
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> b67cf7848633a964fbc76521ce0c97f4198c1d71
 def calc_initial_density(mol_):
     """
     calc_initial_density - Function to calculate the initial guess density
@@ -53,6 +57,7 @@ def calc_initial_density(mol_):
         Duv: the (mol.nao x mol.nao) Guess Density Matrix
     """
 
+    num_aos = mol_.nao  # Number of atomic orbitals, dimensions of the mats
     """
     Replace with your implementation
 
@@ -60,7 +65,7 @@ def calc_initial_density(mol_):
     as the guess. This is equivalent to returning an (mol.nao x mol.nao) double
     matrix of zeros.
     """
-    num_aos = mol_.nao 
+    num_aos = mol_.nao
     Duv = np.zeros((num_aos, num_aos), dtype = np.double)
     return Duv
 
@@ -155,9 +160,13 @@ def solve_Roothan_equations(Fuv_, Suv_):
     function and you can implement this in one line.
     """
 
+<<<<<<< HEAD
     mo_energies, mo_coeffs = sp.linalg.eigh(Fuv_, Suv_)
     
     return mo_energies, mo_coeffs
+=======
+    return mo_energies.real, mo_coeffs.real
+>>>>>>> b67cf7848633a964fbc76521ce0c97f4198c1d71
 
 
 def form_density_matrix(mol_, mo_coeffs_):
@@ -175,7 +184,8 @@ def form_density_matrix(mol_, mo_coeffs_):
         Duv: the density matrix
     """
 
-    nelec = mol_.nelec[0]
+    nelec = mol_.nelec[0]  # Number of occupied orbitals
+    num_aos = mol_.nao  # Number of atomic orbitals, dimensions of the mats
     Duv = np.zeros(mol_.nao, mol_.nao, dtype=np.double)
 
     """
@@ -194,7 +204,7 @@ def form_density_matrix(mol_, mo_coeffs_):
     return Duv
 
 
-def calc_total_energy(Fuv_, Huv_, Duv_, Enuc):
+def calc_total_energy(Fuv_, Huv_, Duv_, Enuc_):
     """
     calc_total_energy - This function calculates the total energy of the
     molecular system
