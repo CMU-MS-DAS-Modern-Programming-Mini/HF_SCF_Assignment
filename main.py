@@ -14,6 +14,7 @@ at:
 """
 from pyscf import gto  # PySCF is a quantum chemistry python module
 import SCF
+from tests.SCF.test_SCF import *
 
 
 def main():
