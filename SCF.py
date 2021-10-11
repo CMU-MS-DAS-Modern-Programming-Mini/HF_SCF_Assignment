@@ -7,6 +7,7 @@ import numpy as np
 import scipy as sp
 import scipy.linalg as linalg
 
+
 def calc_nuclear_repulsion_energy(mol_):
     """
     calc_nuclear_repulsion_energy - calculates the n-e repulsion energy of a
