@@ -42,10 +42,7 @@ def calc_nuclear_repulsion_energy(mol_):
     """
     return Enuc
 
-<<<<<<< HEAD
-=======
 
->>>>>>> b67cf7848633a964fbc76521ce0c97f4198c1d71
 def calc_initial_density(mol_):
     """
     calc_initial_density - Function to calculate the initial guess density
@@ -58,15 +55,8 @@ def calc_initial_density(mol_):
     """
 
     num_aos = mol_.nao  # Number of atomic orbitals, dimensions of the mats
-    """
-    Replace with your implementation
-
-    While we could do many things here, lets start with using the 1e Integrals
-    as the guess. This is equivalent to returning an (mol.nao x mol.nao) double
-    matrix of zeros.
-    """
-    num_aos = mol_.nao
-    Duv = np.zeros((num_aos, num_aos), dtype = np.double)
+    Duv = np.zeros((num_aos, num_aos), dtype=np.double)
+    
     return Duv
 
 
@@ -160,13 +150,10 @@ def solve_Roothan_equations(Fuv_, Suv_):
     function and you can implement this in one line.
     """
 
-<<<<<<< HEAD
+
     mo_energies, mo_coeffs = sp.linalg.eigh(Fuv_, Suv_)
     
-    return mo_energies, mo_coeffs
-=======
     return mo_energies.real, mo_coeffs.real
->>>>>>> b67cf7848633a964fbc76521ce0c97f4198c1d71
 
 
 def form_density_matrix(mol_, mo_coeffs_):

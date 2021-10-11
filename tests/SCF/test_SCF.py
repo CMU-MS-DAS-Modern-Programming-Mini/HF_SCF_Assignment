@@ -3,7 +3,6 @@ import SCF
 
 
 def test_calc_nuclear_repulsion_energy(mol_h2o):
-    assert True
     assert SCF.calc_nuclear_repulsion_energy(mol_h2o) == pytest.approx(8.00236706181077),\
         "Nuclear Repulsion Energy Test (H2O) Failed"
 
@@ -96,3 +95,4 @@ def test_calc_tot_energy(mol_h2o):
     Etot = SCF.calc_tot_energy(Fuv, Huv_, Duv_, Enuc_)
     assert Etot == pytest.approx(8.0023670618),\
         "Total Energy Test Failed"
+
