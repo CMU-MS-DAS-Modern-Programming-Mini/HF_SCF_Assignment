@@ -27,12 +27,12 @@ def calc_nuclear_repulsion_energy(mol_):
     # populating distance matrix
     for i in range(coords.shape[0]):
         for j in range(coords.shape[1]):
-            distance_matrix[i,j] = np.linalg.norm(coords[i]-coords[j])
-    
+            distance_matrix[i, j] = np.linalg.norm(coords[i]-coords[j])
+
     # calculating Enuc
     for i in range(coords.shape[0]):
-        for j in range(i+1,coords.shape[1]):
-            Enuc += (charges[i]*charges[j])/distance_matrix[i,j]
+        for j in range(i+1, coords.shape[1]):
+            Enuc += (charges[i]*charges[j])/distance_matrix[i, j]
 
     return Enuc
 
@@ -50,7 +50,7 @@ def calc_initial_density(mol_):
 
     num_aos = mol_.nao  # Number of atomic orbitals, dimensions of the mats
 
-    Duv = np.zeros((num_aos,num_aos),dtype=np.double)
+    Duv = np.zeros((num_aos, num_aos), dtype=np.double)
 
     return Duv
 
@@ -92,7 +92,8 @@ def calc_fock_matrix(mol_, h_core_, er_ints_, Duv_):
 
     for i in range(num_aos):
         for j in range(num_aos):
-            Fuv[i,j] += (Duv_*er_ints_[i,j]).sum()-0.5*(Duv_*er_ints_[i,:,j]).sum()
+            Fuv[i, j] += (Duv_*er_ints_[i, j]).sum() - \
+                0.5*(Duv_*er_ints_[i, :, j]).sum()
 
     return Fuv
 
@@ -112,7 +113,7 @@ def solve_Roothan_equations(Fuv_, Suv_):
 
     """
 
-    mo_energies,mo_coeffs = sp.linalg.eigh(Fuv_,b=Suv_)
+    mo_energies, mo_coeffs = sp.linalg.eigh(Fuv_, b=Suv_)
 
     return mo_energies.real, mo_coeffs.real
 
@@ -136,14 +137,10 @@ def form_density_matrix(mol_, mo_coeffs_):
     num_aos = mol_.nao  # Number of atomic orbitals, dimensions of the mats
     Duv = np.zeros((mol_.nao, mol_.nao), dtype=np.double)
 
-    for i in range(nelec):
+    for i in range(num_aos):
         for j in range(num_aos):
-            for k in range(num_aos):
-                Duv[j,k] += 2*mo_coeffs_[j,i]*mo_coeffs_[k,i]
-
-    print(Duv[0,0])
-    print(Duv[2,5])
-    print(Duv[5,2])
+            for k in range(nelec):
+                Duv[i, j] += 2.0*mo_coeffs_[i, k]*mo_coeffs_[j, k]
 
     return Duv
 
