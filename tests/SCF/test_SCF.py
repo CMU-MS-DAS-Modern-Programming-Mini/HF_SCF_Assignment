@@ -52,9 +52,9 @@ def test_solve_Roothan_equations(mol_h2o):
     Duv = SCF.calc_initial_density(mol_h2o)
     Fuv = SCF.calc_fock_matrix(mol_h2o, Huv, eri, Duv)
     mo_e, mo_c = SCF.solve_Roothan_equations(Fuv, Suv)
-    assert abs(mo_e) == pytest.approx([32.57830292,  8.08153571,  7.55008599,
-                                       7.36396923,   7.34714487,  4.00229867,
-                                       3.98111115]) \
+    assert mo_e == pytest.approx([-32.57830292,  -8.08153571,  -7.55008599,
+                                  -7.36396923,   -7.34714487,  -4.00229867,
+                                  -3.98111115]) \
         and abs(mo_c[0, :]) == pytest.approx([1.00154358e+00,  2.33624458e-01,
                                               4.97111543e-16, 8.56842145e-02,
                                               2.02299681e-29,  4.82226067e-02,
