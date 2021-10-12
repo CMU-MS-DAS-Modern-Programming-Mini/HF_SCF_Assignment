@@ -55,15 +55,8 @@ def calc_initial_density(mol_):
         Duv: the (mol.nao x mol.nao) Guess Density Matrix
     """
 
-    num_aos = mol_.nao  # Number of atomic orbitals, dimensions of the mats
-    """
-    Replace with your implementation
 
-    While we could do many things here, lets start with using the 1e Integrals
-    as the guess. This is equivalent to returning an (mol.nao x mol.nao) double
-    matrix of zeros.
-    """
-    Duv=np.zeros((num_aos, num_aos), dtype=np.double)
+    Duv = np.zeros((num_aos, num_aos), dtype=np.double)
 
     return Duv
 
