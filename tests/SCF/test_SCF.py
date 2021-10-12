@@ -2,6 +2,7 @@ import pytest
 import SCF
 import pickle
 import numpy as np
+import mol
 
 
 def test_calc_nuclear_repulsion_energy(mol_h2o):
@@ -10,10 +11,10 @@ def test_calc_nuclear_repulsion_energy(mol_h2o):
 
 
 def test_calc_hcore_matrix(mol_h2o):
-    Suv = pickle.load(open("suv.pkl", "rb"))
-    Tuv = pickle.load(open("tuv.pkl", "rb"))
-    Vuv = pickle.load(open("vuv.pkl", "rb"))
-    eri = pickle.load(open("eri.pkl", "rb"))
+    Suv = mol_h2o.intor('int1e_ovlp')
+    Tuv = mol_h2o.intor('int1e_kin')
+    Vuv = mol_h2o.intor('int1e_nuc')
+    eri = mol_h2o.intor("int2e")
     Huv = SCF.calc_hcore_matrix(Tuv, Vuv)
     assert SCF.calc_hcore_matrix(Tuv, Vuv)[0, 0] == \
         pytest.approx(-32.57739541261037) and \
@@ -28,10 +29,10 @@ def test_calc_initial_density(mol_h2o):
 
 
 def test_calc_fock_matrix(mol_h2o):
-    Suv = pickle.load(open("suv.pkl", "rb"))
-    Tuv = pickle.load(open("tuv.pkl", "rb"))
-    Vuv = pickle.load(open("vuv.pkl", "rb"))
-    eri = pickle.load(open("eri.pkl", "rb"))
+    Suv = mol_h2o.intor('int1e_ovlp')
+    Tuv = mol_h2o.intor('int1e_kin')
+    Vuv = mol_h2o.intor('int1e_nuc')
+    eri = mol_h2o.intor("int2e")
     Huv = SCF.calc_hcore_matrix(Tuv, Vuv)
     Duv = SCF.calc_initial_density(mol_h2o)
     assert SCF.calc_fock_matrix(mol_h2o, Huv, eri, Duv)[0, 0] == \
@@ -44,10 +45,10 @@ def test_calc_fock_matrix(mol_h2o):
 
 
 def test_solve_Roothan_equations(mol_h2o):
-    Suv = pickle.load(open("suv.pkl", "rb"))
-    Tuv = pickle.load(open("tuv.pkl", "rb"))
-    Vuv = pickle.load(open("vuv.pkl", "rb"))
-    eri = pickle.load(open("eri.pkl", "rb"))
+    Suv = mol_h2o.intor('int1e_ovlp')
+    Tuv = mol_h2o.intor('int1e_kin')
+    Vuv = mol_h2o.intor('int1e_nuc')
+    eri = mol_h2o.intor("int2e")
     Huv = SCF.calc_hcore_matrix(Tuv, Vuv)
     Duv = SCF.calc_initial_density(mol_h2o)
     Fuv = SCF.calc_fock_matrix(mol_h2o, Huv, eri, Duv)
@@ -63,10 +64,10 @@ def test_solve_Roothan_equations(mol_h2o):
 
 
 def test_form_density_matrix(mol_h2o):
-    Suv = pickle.load(open("suv.pkl", "rb"))
-    Tuv = pickle.load(open("tuv.pkl", "rb"))
-    Vuv = pickle.load(open("vuv.pkl", "rb"))
-    eri = pickle.load(open("eri.pkl", "rb"))
+    Suv = mol_h2o.intor('int1e_ovlp')
+    Tuv = mol_h2o.intor('int1e_kin')
+    Vuv = mol_h2o.intor('int1e_nuc')
+    eri = mol_h2o.intor("int2e")
     Huv = SCF.calc_hcore_matrix(Tuv, Vuv)
     Duv = SCF.calc_initial_density(mol_h2o)
     Fuv = SCF.calc_fock_matrix(mol_h2o, Huv, eri, Duv)
@@ -81,10 +82,10 @@ def test_form_density_matrix(mol_h2o):
 
 
 def test_calc_tot_energy(mol_h2o):
-    Suv = pickle.load(open("suv.pkl", "rb"))
-    Tuv = pickle.load(open("tuv.pkl", "rb"))
-    Vuv = pickle.load(open("vuv.pkl", "rb"))
-    eri = pickle.load(open("eri.pkl", "rb"))
+    Suv = mol_h2o.intor('int1e_ovlp')
+    Tuv = mol_h2o.intor('int1e_kin')
+    Vuv = mol_h2o.intor('int1e_nuc')
+    eri = mol_h2o.intor("int2e")
     Huv = SCF.calc_hcore_matrix(Tuv, Vuv)
     Duv = SCF.calc_initial_density(mol_h2o)
     Fuv = SCF.calc_fock_matrix(mol_h2o, Huv, eri, Duv)
