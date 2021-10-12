@@ -17,6 +17,7 @@ import SCF
 
 print("Done importing")
 
+
 def main():
     """
     The main function call, meant to gather input and invoke the
