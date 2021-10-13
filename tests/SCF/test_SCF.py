@@ -6,6 +6,7 @@ def test_calc_nuclear_repulsion_energy(mol_h2o):
     assert True
 #    assert SCF.calc_nuclear_repulsion_energy(mol_h2o) == 8.00236706181077,\
 #        "Nuclear Repulsion Energy Test (H2O) Failed"
+
 import pytest
 import SCF
 import main
@@ -32,6 +33,7 @@ def test_calc_initial_density(mol_h2o):
     Duv = SCF.calc_initial_density(mol_h2o)
     assert Duv.sum() == 0.0
     assert Duv.shape == (mol_h2o.nao,mol_h2o.nao)
+    
 
 def test_calc_hcore_matrix():  # checks Hcore matrix
     Tuv = pickle.load(open("tuv.pkl", "rb"))
@@ -74,3 +76,4 @@ def test_form_density_matrix(mol_h2o):  # checks Duv new over 1 iteration
     assert Duv_new[0,0] == 2.130023428655504
     assert Duv_new[2,5] == pytest.approx(-0.29226330209653156) 
     assert Duv_new[5,2] == pytest.approx(-0.29226330209653156) 
+
